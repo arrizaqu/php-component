@@ -1,52 +1,30 @@
-#PHP SOAP with NU_SOAP and Laravel 5.*
-1. WSDL 
-2. nu_soap plugins
-	2. configure to Laravel
-		
+#Installing Oracle Driver and Laravel
+	1. Installing to Laravel
+	2. Oracle Configuration
 #how 
-## nu_soap plugins	
-	- URL download : 
-		https://sourceforge.net/projects/nusoap/
-	- Configure : 
-		1. extract file downloaded to lavarel controller directory.
-		2. include class and file nusoap directory in controller class 
-			- include 'Soap/nusoap.php';
-			- use nusoap_client;
+##Installing to Laravel
+	- version 5.3: composer require yajra/laravel-oci8:"5.3.*"  
+	- version 5.2: composer require yajra/laravel-oci8:"5.2.*"
+	- version 5.1: composer require yajra/laravel-oci8:"5.1.*"
+##Oracle Configuration 
+	1. Service Provider : 
+		- Yajra\Oci8\Oci8ServiceProvider::class,
+	2. Optional Conf 
+		- php artisan vendor:publish --tag=oracle
+	3. PHP config file configuration : 
+		example : 
+			'oracle' => [
+				'driver'        => 'oracle',
+				'tns'           => env('DB_TNS', ''),
+				'host'          => env('DB_HOST', ''),
+				'port'          => env('DB_PORT', '1521'),
+				'database'      => env('DB_DATABASE', ''),
+				'username'      => env('DB_USERNAME', ''),
+				'password'      => env('DB_PASSWORD', ''),
+				'charset'       => env('DB_CHARSET', 'AL32UTF8'),
+				'prefix'        => env('DB_PREFIX', ''),
+				'prefix_schema' => env('DB_SCHEMA_PREFIX', ''),
+			],
 			
-	- example : 
-		$client = new nusoap_client('htttps://WS.tws?WSDL', true);
-		$error  = $client->getError();
-		 
-		if ($error) {
-			echo "<h2>Constructor error</h2><pre>" . $error . "</pre>";
-		}
-		 
-		$result = $client->call("start", array("id" => 1, "pkk" =>1));
-		 
-		if ($client->fault) {
-			echo "<h2>Fault</h2><pre>";
-			print_r($result);
-			echo "</pre>";
-		} else {
-			$error = $client->getError();
-			if ($error) {
-				echo "<h2>Error</h2><pre>" . $error . "</pre>";
-			} else {
-				echo "<h2>Main</h2>";
-				echo $result;
-			}
-		}
-		 
-		// show soap request and response
-		echo "<h2>Request</h2>";
-		echo "<pre>" . htmlspecialchars($client->request, ENT_QUOTES) . "</pre>";
-		echo "<h2>Response</h2>";
-		echo "<pre>" . htmlspecialchars($client->response, ENT_QUOTES) . "</pre>";
-		echo "=========== response ============ ";
-		echo "<pre>";
-			var_dump($result);
-		echo "</pre>";
-	
-		
 ##Reference
-	- https://github.com/deviservi/nusoap
+	- https://github.com/yajra/laravel-oci8
